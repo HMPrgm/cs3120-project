@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 shadow-lg border-0 text-center" style="max-width: 400px; background: #f8f9fa;">
+        
+        {% if user.is_authenticated %}
+            <h1 class="text-success fw-bold">Welcome Back, {{ user.username }}!</h1>   
+
+            {% if user.profile.role == "librarian" %}
+                <a href="{% url 'user:librarian_dashboard' %}" class="btn btn-outline-primary mt-3">Go to Librarian Dashboard</a>
+            {% elif user.profile.role == "patron" %}
+                <a href="{% url 'user:patron_dashboard' %}" class="btn btn-outline-success mt-3">Go to Patron Dashboard</a>
+            {% endif %}
+
+            <a href="/accounts/logout" class="btn btn-outline-danger mt-3">Log Out</a>
+
+        {% else %}
+            <h1 class="text-dark fw-bold">Welcome!</h1>   
+            <a href="/accounts/google/login/?process=login" class="btn btn-primary mt-3">
+                <i class="fab fa-google me-2"></i> Sign in with Google
+            </a>
+        {% endif %}
+
+        <a href="{% url 'catalog:index' %}" class="btn btn-outline-info mt-4">📚 Browse Catalog</a>
+    </div>
+</div>
+{% endblock %}

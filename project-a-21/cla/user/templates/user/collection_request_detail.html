@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg p-4" style="max-width: 600px; margin: auto; background-color: #f8f9fa;">
+    <h2 class="text-center text-primary mb-3">📋 Access Request Details</h2>
+    <hr>
+    
+    <p><strong>Requested By:</strong> {{ request_obj.user.username }}</p>
+    <p><strong>Email:</strong> {{ request_obj.user.email }}</p>
+    <p><strong>Collection:</strong> {{ request_obj.collection.name }}</p>
+    <p><strong>Requested On:</strong> {{ request_obj.request_date|date:"F j, Y, g:i a" }}</p>
+    <p><strong>Status:</strong>
+      <span class="badge 
+        {% if request_obj.status == 'APPROVED' %} bg-success
+        {% elif request_obj.status == 'DENIED' %} bg-danger
+        {% else %} bg-warning text-dark
+        {% endif %}">
+        {{ request_obj.get_status_display }}
+      </span>
+    </p>
+
+    {% if request_obj.status == "PENDING" %}
+    <form method="POST" action="{% url 'user:collection_request_detail' request_obj.id %}" class="mt-4 text-center">
+      {% csrf_token %}
+      <button type="submit" name="action" value="approve" class="btn btn-outline-success me-2">✅ Approve</button>
+      <button type="submit" name="action" value="deny" class="btn btn-outline-danger">❌ Deny</button>
+    </form>
+  {% endif %}
+
+    <div class="text-center mt-4">
+      <a href="{% url 'user:lib_patron_collection_request' %}" class="btn btn-secondary">← Back to All Requests</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

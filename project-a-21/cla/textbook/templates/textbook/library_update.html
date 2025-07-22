@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="card shadow p-4">
+      <h1 class="text-primary mb-4 text-center">Update Library</h1>
+
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row">
+          <div class="col-md-6">
+            {{ library_form.name.label_tag }}{{ library_form.name }}
+            {{ library_form.description.label_tag }}{{ library_form.description }}
+            {{ library_form.collections.label_tag }}{{ library_form.collections }}
+            {{ library_form.tags.label_tag }}{{ library_form.tags }}
+            <div>{{ library_form.public.label_tag }} {{ library_form.public }}</div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-success">💾 Update Library</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

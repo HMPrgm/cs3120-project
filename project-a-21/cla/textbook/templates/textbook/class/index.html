@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-3">
+    <h1 class="text-primary text-center">Classes</h1>
+
+    <!-- Search Form + View Collections Button -->
+    <form method="GET" action="{% url 'catalog:class_index' %}" class="d-flex justify-content-center my-4 gap-2">
+      <input type="text" name="q" class="form-control w-50" placeholder="Search textbooks..." value="{{ query }}" />
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <div class="text-center mb-3">
+      <div class="mb-3">
+        <a class="btn btn-outline-primary" href="{% url 'catalog:class_create' %}">➕ Create New Class</a>
+      </div>
+      <div>
+        <a class="btn btn-outline-primary" href="{% url 'catalog:index' %}">⬅️ Back to Catalog</a>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="list-group">
+      {% for c in classes %}
+        <div class="list-group-item">
+          <a href="{% url 'catalog:class_detail' c.id %}" class="list-group-item list-group-item-action">
+            <h5 class="mb-0">{{ c.department }} {{ c.number }}</h5>
+            <p class="text-muted">{{ c.name }}</p>
+          </a>
+        </div>
+      {% empty %}
+        <p class="text-center text-muted">No classes found.</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

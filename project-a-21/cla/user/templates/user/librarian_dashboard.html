@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="card shadow p-4">
+      <h1 class="text-center">Librarian Dashboard</h1>
+
+      <div class="mt-4">
+        <h4>Features</h4>
+        <div class="d-grid gap-2">
+          <a href="{% url 'user:lib_view_requests' %}" class="btn btn-outline-primary">View Requests</a>
+          <a href="{% url 'user:lib_upgrade_patrons' %}" class="btn btn-outline-warning">Upgrade Patrons</a>
+          <a href="{% url 'user:collections' %}" class="btn btn-outline-primary">My Collections</a>
+        </div>
+      </div>
+
+      {% if img %}
+        <div class="text-center mt-4">
+          <img src="{{ img }}" class="img-fluid rounded shadow-sm" alt="Librarian Image" width="150px"/>
+        </div>
+      {% endif %}
+      
+      <a href="{% url 'user:user_profile' %}" class="btn btn-outline-primary mt-3">👤 View Profile</a>
+    </div>
+    
+    <a href="/" class="btn btn-secondary mt-3">← Back to Home</a>
+  </div>
+{% endblock %}

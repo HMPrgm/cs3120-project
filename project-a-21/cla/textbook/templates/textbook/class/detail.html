@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="card p-4 shadow-lg border-0 text-center" style="max-width: 500px; margin: auto; background: #f8f9fa;">
+      <h1 class="text-primary fw-bold">{{ class_obj.department }} {{ class_obj.number }}</h1>
+      <h5 class="text-muted">{{ class_obj.name }}</h5>
+      <hr />
+
+      <!-- Librarian Only -->
+      <div class="mt-4">
+        <!-- Edit (Librarian Only) -->
+        <a href="{% url 'catalog:class_update' class_obj.id %}" class="btn btn-outline-info mb-3">✏️ Edit Item</a>
+
+        <!-- Delete (Librarian Only) -->
+        <form action="{% url 'catalog:class_delete' class_obj.id %}" method="POST" class="mb-3">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-danger">🗑️ Delete</button>
+        </form>
+
+        <!-- Back to Catalog at the bottom -->
+        <a href="{% url 'catalog:class_index' %}" class="btn btn-outline-secondary">Back to Classes</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

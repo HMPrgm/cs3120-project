@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-3">
+    <h1 class="text-primary text-center">Textbook Catalog</h1>
+
+<!-- Search Form + View Collections + Libraries Buttons -->
+<form method="GET" action="{% url 'catalog:index' %}" class="d-flex justify-content-center my-4 gap-2">
+  <input type="text" name="q" class="form-control w-50" placeholder="Search textbooks..." value="{{ query }}" />
+  <button type="submit" class="btn btn-primary">Search</button>
+  <a href="{% url 'catalog:collections_index' %}" class="btn btn-outline-secondary">📦 View Collections</a>
+  <a href="{% url 'catalog:libraries_index' %}" class="btn btn-outline-secondary">🏛️ View Libraries</a>
+</form>
+
+    {% if role == 'librarian' %}
+      <div class="text-center mb-3">
+        <div class="mb-3">
+          <a class="btn btn-outline-primary" href="{% url 'catalog:create' %}">➕ Create New Textbook</a>
+        </div>
+        <div>
+          <a class="btn btn-outline-primary" href="{% url 'catalog:class_index' %}">🏛️ Manage Classes</a>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Results -->
+    <div class="list-group">
+      {% for textbook in textbooks %}
+        <div class="list-group-item">
+          <a href="{% url 'catalog:textbook_detail' textbook.id %}" class="list-group-item list-group-item-action">
+            <h5 class="mb-0">{{ textbook.title }}</h5>
+            <p class="text-muted">{{ textbook.author }}</p>
+          </a>
+        </div>
+      {% empty %}
+        <p class="text-center text-muted">No textbooks found.</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

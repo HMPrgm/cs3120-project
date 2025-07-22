@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h1 class="text-primary mb-4 text-center">📘 Add New Textbook</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="row">
+        <div class="col-md-6">
+          {{ textbook_form.title.label_tag }}{{ textbook_form.title }}
+          {{ textbook_form.author.label_tag }}{{ textbook_form.author }}
+          {{ textbook_form.genre.label_tag }}{{ textbook_form.genre }}
+          {{ textbook_form.published_date.label_tag }}{{ textbook_form.published_date }}
+          {{ textbook_form.condition.label_tag }}{{ textbook_form.condition }}
+          {{ textbook_form.associated_class.label_tag }}{{ textbook_form.associated_class }}
+          {{ textbook_form.library.label_tag }}{{ textbook_form.library }}
+        </div>
+
+        <div class="col-md-6">
+          {{ textbook_form.description.label_tag }}{{ textbook_form.description }}
+          {{ photo_form.picture.label_tag }}{{ photo_form.picture }}
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success">➕ Add Textbook</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

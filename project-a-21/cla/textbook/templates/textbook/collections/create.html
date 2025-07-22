@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="card shadow p-4">
+      <h1 class="text-primary mb-4 text-center">📦 Add New Collection</h1>
+
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row">
+          <div class="col-md-6">
+            {{ collection_form.name.label_tag }}{{ collection_form.name }}
+            {{ collection_form.description.label_tag }}{{ collection_form.description }}
+            {{ collection_form.textbooks.label_tag }}{{ collection_form.textbooks }}
+            
+            <!-- Librarian Only -->
+            {% if role == 'librarian' %}
+              <div>{{ collection_form.private.label_tag }} {{ collection_form.private }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-success">➕ Add Collection</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

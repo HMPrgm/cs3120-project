@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="text-center text-primary">🔧 Upgrade Patrons</h1>
+  <hr>
+
+  {% if patrons %}
+    {% for patron in patrons %}
+      <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+        <div>
+          <strong>{{ patron.username }}</strong> — <span class="text-muted">{{ patron.email }}</span>
+        </div>
+        <a href="{% url 'user:perform_upgrade' patron.id %}" class="btn btn-outline-success btn-sm">
+          Upgrade to Librarian
+        </a>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="text-center text-muted">No patrons available to upgrade.</p>
+  {% endif %}
+
+  <div class="text-center mt-4">
+    <a href="{% url 'user:librarian_dashboard' %}" class="btn btn-secondary">← Back to Dashboard</a>
+  </div>
+</div>
+{% endblock %}

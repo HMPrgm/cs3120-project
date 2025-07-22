@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow-lg border-0 p-4 text-center" style="max-width: 600px; background-color: #f8f9fa;">
+    
+    {% if img %}
+      <div class="my-3">
+        <img src="{{ img.url }}" class="img-fluid rounded shadow-sm" alt="Profile Image" width="150px" />
+      </div>
+    {% endif %}
+
+    <div class="mb-3">
+      <a href="{% url 'user:upload' %}" class="btn btn-outline-secondary btn-sm">Upload New Profile Photo</a>
+    </div>
+
+    <h1 class="text-primary fw-bold">{{ user.first_name }} {{ user.last_name }}</h1>
+    <p class="text-secondary fw-bold">{{ user.username }} – {{ user.profile.role }}</p>
+    <p class="text-muted">{{ user.email }}</p>
+
+    <hr>
+
+    {% if user.profile.role == "librarian" %}
+      <a href="{% url 'user:librarian_dashboard' %}" class="btn btn-secondary">← Back to Dashboard</a>
+    {% elif user.profile.role == "patron" %}
+      <a href="{% url 'user:patron_dashboard' %}" class="btn btn-secondary">← Back to Dashboard</a>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

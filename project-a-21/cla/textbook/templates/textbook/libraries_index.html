@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-3">
+    <h1 class="text-primary text-center">🏛️ Library Catalog</h1>
+
+    <!-- Search Form -->
+    <form method="GET" action="" class="d-flex justify-content-center my-4 gap-2">
+      <input type="text" name="q" class="form-control w-50" placeholder="Search libraries..." value="{{ query }}">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <!-- Create Library Button (Librarians Only) -->
+    {% if role == 'librarian' %}
+      <div class="text-center mb-4">
+        <a href="{% url 'catalog:libraries_create' %}" class="btn btn-outline-success">➕ Add New Library</a>
+      </div>
+    {% endif %}
+
+    <!-- List of Libraries -->
+    <div class="list-group mb-4">
+      {% for lib in libraries %}
+        <a href="{% url 'catalog:libraries_detail' lib.id %}" class="list-group-item list-group-item-action">
+          <h5 class="mb-1">{{ lib.name }}</h5>
+          <p class="text-muted mb-0">
+            Includes {{ lib.count }} textbooks · Managed by {{ lib.user.username }}
+          </p>
+        </a>
+      {% empty %}
+        <p class="text-center text-muted">No libraries found.</p>
+      {% endfor %}
+    </div>
+
+    <div class="text-center">
+      <a href="{% url 'catalog:index' %}" class="btn btn-outline-secondary">← Back to Textbook Catalog</a>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="card shadow p-4">
+      <h1 class="text-primary text-center">{{ library.name }}</h1>
+      <p class="text-muted text-center">Managed by {{ library.user.username }}</p>
+      <hr>
+
+      {% if library.description %}
+        <p><strong>Description:</strong> {{ library.description }}</p>
+      {% endif %}
+
+      {% if library.tags %}
+        <p><strong>Tags:</strong> {{ library.tags }}</p>
+      {% endif %}
+
+      <p><strong>Visibility:</strong> 
+        {% if library.public %}
+          🌍 Public
+        {% else %}
+          🔒 Private
+        {% endif %}
+      </p>
+
+      <h4 class="mt-4">📦 Collections in this Library</h4>
+      <div class="list-group mb-3">
+        {% for collection in library.collections.all %}
+          <a href="{% url 'catalog:collections_detail' collection.id %}" class="list-group-item list-group-item-action">
+            <div class="d-flex justify-content-between align-items-center">
+              <strong>{{ collection.name }}</strong>
+              <span class="badge bg-secondary">{{ collection.count }} textbook{{ collection.count|pluralize }}</span>
+            </div>
+          </a>
+        {% empty %}
+          <div class="list-group-item text-muted">No collections added yet.</div>
+        {% endfor %}
+      </div>
+
+      <div class="text-center d-flex flex-column gap-2">
+        <a href="{% url 'catalog:libraries_index' %}" class="btn btn-outline-secondary">← Back to Library Catalog</a>
+        {% if role == 'librarian' %}
+          <a href="{% url 'catalog:library_update' library.id %}" class="btn btn-outline-primary">✏️ Edit Library</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

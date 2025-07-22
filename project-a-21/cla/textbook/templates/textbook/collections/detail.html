@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="card p-4 shadow-lg border-0 text-center" style="max-width: 500px; margin: auto; background: #f8f9fa;">
+      <h1 class="text-primary fw-bold">{{ collection.name }}</h1>
+      <h5 class="text-muted">Created by {{ collection.user.username }}</h5>
+
+      <!-- Show description if available -->
+      {% if collection.description %}
+        <p class="mt-2">{{ collection.description }}</p>
+      {% endif %}
+
+      <hr />
+
+      {% for textbook in collection.textbooks.all %}
+        <a href="{% url 'catalog:textbook_detail' textbook.id %}">{{ textbook.title }}</a><br />
+      {% endfor %}
+
+      <!-- Librarian Only -->
+      {% if role == 'librarian' or user == collection.user %}
+        <div class="mt-4">
+
+          <!-- Add Patrons (Librarian Only + Owner + Private Collection) -->
+          {% if role == 'librarian' and user == collection.user and collection.private %}
+            <div>
+              <a href="{% url 'catalog:collections_add_patron_view' collection.id %}" class="btn btn-outline-info mb-3">👤 Add Patrons</a>
+            </div>
+          {% endif %}
+
+          <!-- Edit (Librarian or Owner) -->
+          <a href="{% url 'catalog:collections_update' collection.id %}" class="btn btn-outline-info mb-3">✏️ Edit Collection</a>
+
+          <!-- Delete (Librarian or Owner) -->
+          <form action="{% url 'catalog:collections_delete' collection.id %}" method="POST" class="mb-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger">🗑️ Delete</button>
+          </form>
+
+          <!-- Back to Catalog at the bottom -->
+          <a href="{% url 'catalog:collections_index' %}" class="btn btn-outline-secondary">📚 Back to Catalog</a>
+        </div>
+      {% else %}
+        <!-- Default for anonymous or not owner -->
+        <a href="{% url 'catalog:collections_index' %}" class="btn btn-outline-secondary mt-3">📚 Back to Catalog</a>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

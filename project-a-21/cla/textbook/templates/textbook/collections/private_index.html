@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-3">
+    <h1 class="text-primary text-center">📦 Private Textbook Collections</h1>
+
+    <!-- Search Form -->
+    <form method="GET" action="#" class="d-flex justify-content-center my-4 gap-2">
+      <input type="text" name="q" class="form-control w-50" placeholder="Search collections..." value="{{ query }}" />
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <div class="list-group mb-4">
+      {% for collection in collections %}
+        <a href="{% url 'catalog:collections_detail' collection.id %}" class="list-group-item list-group-item-action">
+          <div>
+            <h5 class="mb-1">{{ collection.name }}</h5>
+            <p class="text-muted">Includes {{ collection.count }} textbooks · Created by {{ collection.user }}</p>
+          </div>
+          {% if role == 'librarian' %}
+
+          {% else %}
+            {% if user in collection.allowed_patrons.all %}
+              <p>You Have Access</p>
+            {% else %}
+              {% if collection in requests %}
+                <p>Already requested</p>
+              {% else %}
+              <form method="POST" action="{% url 'catalog:request_collection_access' collection.id %}" class="mt-4">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-success me-2">Request Access</button>
+              </form>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        </a>
+      {% empty %}
+        <p class="text-center text-muted">No collections found.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Back Button at Bottom -->
+    <div class="text-center">
+      <a href="{% url 'catalog:index' %}" class="btn btn-outline-secondary">← Back to Textbook Catalog</a>
+    </div>
+  </div>
+{% endblock %}

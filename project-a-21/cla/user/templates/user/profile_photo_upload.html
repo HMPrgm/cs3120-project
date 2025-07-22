@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow-lg border-0 p-4 text-center" style="max-width: 500px; background-color: #f8f9fa;">
+
+    <h2 class="text-primary mb-4">Update Profile Photo</h2>
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-success mt-2">Submit</button>
+    </form>
+
+    {% if user.profile.role == "librarian" %}
+      <a href="{% url 'user:librarian_dashboard' %}" class="btn btn-outline-secondary mt-4">← Back to Dashboard</a>
+    {% elif user.profile.role == "patron" %}
+      <a href="{% url 'user:patron_dashboard' %}" class="btn btn-outline-secondary mt-4">← Back to Dashboard</a>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

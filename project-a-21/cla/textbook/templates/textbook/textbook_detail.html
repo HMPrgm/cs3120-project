@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="card p-4 shadow-lg border-0 text-center" style="max-width: 600px; margin: auto; background: #f8f9fa;">
+      <h1 class="text-primary fw-bold">{{ textbook.title }}</h1>
+      <h5 class="text-muted">{{ textbook.author }}</h5>
+      <hr />
+
+      {% if img %}
+        <div class="my-4">
+          <img src="{{ img.url }}" class="img-fluid rounded shadow-sm" alt="Textbook Image" width="150px" />
+        </div>
+      {% endif %}
+
+      <!-- Textbook Info -->
+      <p><strong>Genre:</strong> {{ textbook.genre }}</p>
+      <p><strong>Condition:</strong> {{ textbook.get_condition_display }}</p>
+      <p><strong>Published:</strong> {{ textbook.published_date }}</p>
+      <p><strong>Associated Class:</strong> {{ textbook.associated_class }}</p>
+      <p><strong>Location:</strong> 
+        {% if textbook.library %}
+          {{ textbook.library.name }}
+        {% else %}
+          <span class="text-muted">Not assigned</span>
+        {% endif %}
+      </p>
+      <p>
+        <strong>Checked Out:</strong>
+        {% if textbook.checked_out %}
+          ✅ Yes
+        {% else %}
+          ❌ No
+        {% endif %}
+      </p>
+      <p><strong>Description:</strong> {{ textbook.description|linebreaks }}</p>
+
+      <!-- ⭐ Average Rating -->
+      <hr />
+      <h4 class="mt-4">⭐ Average Rating</h4>
+      <p>
+        {{ textbook.average_rating }} out of 5
+        <span class="text-muted">({{ textbook.rating_count }} review{{ textbook.rating_count|pluralize }})</span>
+      </p>
+
+      <!-- 🗣️ Reviews -->
+      {% if textbook.ratings.exists %}
+        <h5 class="mt-3 text-start">🗣️ User Reviews</h5>
+        <div class="text-start">
+          {% for review in textbook.ratings.all %}
+            <div class="border p-3 rounded mb-2 bg-light text-start">
+              <strong>{{ review.user.username }}</strong>
+              <span class="text-warning">{{ review.rating }} ★</span>
+              <p class="mb-1">{{ review.comment }}</p>
+              <small class="text-muted">{{ review.created_at|date:"F j, Y" }}</small>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted">No reviews yet.</p>
+      {% endif %}
+
+      {% if role == 'patron' %}
+      {% if approved and not has_review %}
+        <a href="{% url 'catalog:create_review' textbook.id %}"
+          class="btn btn-outline-primary mt-3">
+          ✏️ Leave a Review
+        </a>
+      {% elif approved and has_review %}
+        <p class="mt-3 text-success">✅ You’ve already reviewed this book.</p>
+      {% endif %}
+    {% endif %}
+
+      <!-- 📥 Request (Patron Only) -->
+      {% if not textbook.checked_out and user.profile.role == "patron" %}
+        <a href="{% url 'catalog:request_textbook' textbook.id %}" class="btn btn-success mt-3">
+          📥 Request This Textbook
+        </a>
+      {% endif %}
+
+      <!-- ✏️ Librarian Only -->
+      {% if role == 'librarian' %}
+        <div class="mt-4">
+          <a href="{% url 'catalog:update' textbook.id %}" class="btn btn-outline-info mb-3">✏️ Edit Item</a>
+
+          <form action="{% url 'catalog:delete' textbook.id %}" method="POST" class="mb-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger">🗑️ Delete</button>
+          </form>
+
+          <a href="{% url 'catalog:index' %}" class="btn btn-outline-secondary">📚 Back to Catalog</a>
+        </div>
+      {% else %}
+        <a href="{% url 'catalog:index' %}" class="btn btn-outline-secondary mt-3">📚 Back to Catalog</a>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

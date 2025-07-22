@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h1 class="text-primary mb-4 text-center">Add New Class</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="row">
+        <div class="col-md-6">
+          {{ class_form.department.label_tag }}{{ class_form.department }}
+          {{ class_form.number.label_tag }}{{ class_form.number }}
+          {{ class_form.name.label_tag }}{{ class_form.name }}
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success">➕ Add Class</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

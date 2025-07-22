@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="text-center text-primary">📥 My Textbook Requests</h1>
+
+    {% if requests %}
+      <div class="list-group mt-4">
+        {% for req in requests %}
+          <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ req.textbook.title }}</strong> requested on 
+              <span class="text-muted">{{ req.request_date|date:"M d, Y" }}</span>
+            </div>
+            <span class="badge 
+              {% if req.status == 'APPROVED' %} bg-success 
+              {% elif req.status == 'DENIED' %} bg-danger 
+              {% else %} bg-warning text-dark 
+              {% endif %}">
+              {{ req.get_status_display }}
+            </span>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-center text-muted mt-4">You haven’t requested any textbooks yet.</p>
+    {% endif %}
+
+    <div class="text-center mt-4">
+      <a href="{% url 'user:patron_dashboard' %}" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+  </div>
+{% endblock %}

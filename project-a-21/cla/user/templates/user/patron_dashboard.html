@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg border-0 p-4" style="max-width: 800px; background-color: #f8f9fa;">
+        <div class="text-center">
+            <h1 class="text-primary fw-bold">Welcome, {{ user.username }}!</h1>
+            <hr>
+
+            <div class="mt-3 d-grid gap-2 col-8 mx-auto">
+                <a href="{% url 'user:patron_borrowed_books' %}" class="btn btn-primary">📚 Go to Borrowed Textbooks</a>
+                <a href="{% url 'user:patron_view_requests' %}" class="btn btn-outline-warning">📥 My Requests</a>
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-between mt-3">
+                <a href="/" class="btn btn-secondary">← Back to Home</a>
+                <a href="{% url 'user:user_profile' %}" class="btn btn-outline-primary">👤 View Profile</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

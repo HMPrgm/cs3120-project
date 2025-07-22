@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="text-center text-primary">Add Patrons to Collection: {{ collection.name }}</h1>
+    <hr />
+
+    {% if allowed_patrons or disallowed_patrons %}
+      {% for patron in allowed_patrons %}
+        <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+          <div>
+            <strong>{{ patron.username }}</strong> — <span class="text-muted">{{ patron.email }}</span>
+          </div>
+          <a href="{% url 'catalog:collections_remove_patron' collection.id patron.id %}" class="btn btn-outline-danger btn-sm">Remove from collection</a>
+        </div>
+      {% endfor %}
+      {% for patron in disallowed_patrons %}
+        <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+          <div>
+            <strong>{{ patron.username }}</strong> — <span class="text-muted">{{ patron.email }}</span>
+          </div>
+
+          <a href="{% url 'catalog:collections_add_patron' collection.id patron.id %}" class="btn btn-outline-success btn-sm">Add to collection</a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-center text-muted">No patrons available to add.</p>
+    {% endif %}
+
+    <div class="text-center mt-4">
+      <a href="{% url 'catalog:collections_detail' collection.id %}" class="btn btn-secondary">← Back to Collection</a>
+    </div>
+  </div>
+{% endblock %}
